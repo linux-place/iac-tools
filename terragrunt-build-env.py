@@ -8,6 +8,8 @@ import json
 def buildvars(hclpath, terragruntpath):
     formated = hclpath.split("/")
     region = formated[2]
+    if region == "_global":
+      region = "us-east-1"
     account = formated[1]
     environment = formated[3]
     instance_path = terragruntpath
@@ -26,7 +28,7 @@ def main():
     path_to_include = sys.argv[1]
     terragrunt_path = sys.argv[2]
     common_vars = buildvars(path_to_include, terragrunt_path)
-    with open('custom.tfvars', 'w') as file:  # Use file to refer to the file object
+    with open("{}/custom.tfvars".format(terragrunt_path), 'w') as file:  # Use file to refer to the file object
         vars =  """
                 aws_region = "{region}"
                 base_tags = {{ 
